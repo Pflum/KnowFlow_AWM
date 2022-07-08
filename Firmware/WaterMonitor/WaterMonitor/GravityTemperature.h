@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 * GravityTemperature.h
 *
 * Copyright (C)    2017   [DFRobot](http://www.dfrobot.com),
@@ -50,4 +50,3 @@ private:
 	// Analyze temperature data
 	double TempProcess(bool ch);
 };
-

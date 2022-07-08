@@ -59,10 +59,10 @@ GravitySensorHub sensorHub;
 SdService sdService = SdService(sensorHub.sensors);
 void setup() {
 	Serial.begin(9600);
-	//rtc.setup();
+	rtc.setup();
+  rtc.adjustRtc(F(__DATE__), F(__TIME__));
 	sensorHub.setup();
 	sdService.setup();
-
 }
 
 
@@ -80,13 +80,13 @@ void setup() {
 unsigned long updateTime = 0;
 
 void loop() {
-	//rtc.update();
+	rtc.update();
 	sensorHub.update();
 	sdService.update();
-
+  
 	// ************************* Serial debugging ******************
-	//if(millis() - updateTime > 2000)
-	//{
+	if(millis() - updateTime > 20)
+	{
 		/*updateTime = millis();
 		Serial.print(F("ph= "));
 		Serial.print(sensorHub.getValueBySensorNumber(0));
@@ -98,7 +98,23 @@ void loop() {
 		Serial.print(sensorHub.getValueBySensorNumber(3));
 		Serial.print(F("  Orp= "));
 		Serial.println(sensorHub.getValueBySensorNumber(4));*/
-	//}
+    
+    Serial.print("   Year = ");//year
+    Serial.print(rtc.year);
+    Serial.print("   Month = ");//month
+    Serial.print(rtc.month);
+    Serial.print("   Day = ");//day
+    Serial.print(rtc.day);
+    Serial.print("   Week = ");//week
+    Serial.print(rtc.week);
+    Serial.print("   Hour = ");//hour
+    Serial.print(rtc.hour);
+    Serial.print("   Minute = ");//minute
+    Serial.print(rtc.minute);
+    Serial.print("   Second = ");//second
+    Serial.println(rtc.second);
+    //Serial.println(rtc.year + '-' + rtc.month + '-' + rtc.day + '-' + rtc.hour + '-' + rtc.minute + '-' + rtc.second);
+	}
 }
 
 
@@ -132,4 +148,3 @@ void loop() {
 //Serial.print(rtc.minute);
 //Serial.print("   Second = ");//second
 //Serial.println(rtc.second);
-

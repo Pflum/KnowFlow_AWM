@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 * GravityEc.h
 *
 * Copyright (C)    2017   [DFRobot](http://www.dfrobot.com),
@@ -72,4 +72,3 @@ private:
 	// Calculate the conductivity
 	void calculateEc();
 };
-

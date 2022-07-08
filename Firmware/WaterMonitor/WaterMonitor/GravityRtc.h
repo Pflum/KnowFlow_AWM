@@ -1,4 +1,4 @@
-﻿/*********************************************************************
+/*********************************************************************
 * GravityRtc.h
 *
 * Copyright (C)    2017   [DFRobot](http://www.dfrobot.com),
@@ -20,6 +20,7 @@
 **********************************************************************/
 
 #pragma once
+#include <Arduino.h>
 
 #define RTC_Address   0x32  //RTC_Address
 
@@ -42,6 +43,12 @@ public:
 	// initialize the RTC time to set the corresponding year, month, day, day, minute, minute
 	void initRtc();
 
+  //Initialize RTC time to set the corresponding year, month, day, Weekday Minute Second
+  void adjustRtc(const __FlashStringHelper* date, const __FlashStringHelper* time);
+  
+  void adjustRtc(uint16_t year,uint8_t month,uint8_t day,uint8_t week,
+              uint8_t hour,uint8_t minute,uint8_t second);
+
 	// initialization
 	void  setup ();
 
@@ -63,7 +70,10 @@ private:
 	void WriteTimeOn(void);
 	void WriteTimeOff(void);
 	unsigned long timeUpdate;
-
+  uint8_t conv2d(const char* p);
+  //adjust RTC
+  uint8_t dayOfTheWeek();
+  // number of days since 2000/01/01, valid for 2001..2099
+  uint16_t date2days(uint16_t y, uint8_t m, uint8_t d);
 
 };
-
