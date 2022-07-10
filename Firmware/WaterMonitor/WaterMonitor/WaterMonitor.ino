@@ -50,15 +50,22 @@
 #include "OneWire.h"
 #include "SdService.h"
 #include "Debug.h"
+#include "EasyNextionLibrary.h"
 
 // clock module
 GravityRtc rtc;
+EasyNex myNex(Serial);
 
 // sensor monitor
 GravitySensorHub sensorHub;
 SdService sdService = SdService(sensorHub.sensors);
 void setup() {
-	Serial.begin(9600);
+	//Serial.begin(9600);
+  myNex.begin(9600);/*
+  delay(50);
+  myNex.writeNum("baud", 115200);
+  delay(50);
+  myNex.begin(115200);*/
 	rtc.setup();
   rtc.adjustRtc(F(__DATE__), F(__TIME__));
 	sensorHub.setup();
@@ -85,7 +92,7 @@ void loop() {
 	sdService.update();
   
 	// ************************* Serial debugging ******************
-	if(millis() - updateTime > 20)
+	if(millis() - updateTime > 2000)
 	{
 		/*updateTime = millis();
 		Serial.print(F("ph= "));
@@ -99,21 +106,14 @@ void loop() {
 		Serial.print(F("  Orp= "));
 		Serial.println(sensorHub.getValueBySensorNumber(4));*/
     
-    Serial.print("   Year = ");//year
-    Serial.print(rtc.year);
-    Serial.print("   Month = ");//month
-    Serial.print(rtc.month);
-    Serial.print("   Day = ");//day
-    Serial.print(rtc.day);
-    Serial.print("   Week = ");//week
-    Serial.print(rtc.week);
-    Serial.print("   Hour = ");//hour
-    Serial.print(rtc.hour);
-    Serial.print("   Minute = ");//minute
-    Serial.print(rtc.minute);
-    Serial.print("   Second = ");//second
-    Serial.println(rtc.second);
-    //Serial.println(rtc.year + '-' + rtc.month + '-' + rtc.day + '-' + rtc.hour + '-' + rtc.minute + '-' + rtc.second);
+    String timestamp = String(rtc.day) + "." + String(rtc.month) + "." + String(rtc.year) + " " + String(rtc.hour) + ":" + String(rtc.minute);
+    //String timestamp = String(rtc.hour) + ":" + String(rtc.minute) + ":" + String(rtc.second);
+    myNex.writeStr("tTime.txt", String(timestamp));
+    myNex.writeStr("vPH.txt", String(sensorHub.getValueBySensorNumber(0))); // PH
+    myNex.writeStr("vTemp.txt", String(sensorHub.getValueBySensorNumber(1))); // °C
+    myNex.writeStr("vDO.txt", String(sensorHub.getValueBySensorNumber(2))); // mg/L
+    myNex.writeStr("vEC.txt", String(sensorHub.getValueBySensorNumber(3))); // ms/cm
+    myNex.writeStr("vORP.txt", String(sensorHub.getValueBySensorNumber(4))); // mV
 	}
 }
 
