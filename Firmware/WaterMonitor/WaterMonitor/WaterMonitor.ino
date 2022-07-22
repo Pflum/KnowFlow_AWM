@@ -87,9 +87,13 @@ void setup() {
 unsigned long updateTime = 0;
 
 void loop() {
+  myNex.NextionListen();
 	rtc.update();
+  myNex.NextionListen();
 	sensorHub.update();
+  myNex.NextionListen();
 	sdService.update();
+  myNex.NextionListen();
   
 	// ************************* Serial debugging ******************
 	if(millis() - updateTime > 2000)
@@ -107,7 +111,7 @@ void loop() {
 		Serial.println(sensorHub.getValueBySensorNumber(4));*/
     
     String timestamp = String(rtc.day) + "." + String(rtc.month) + "." + String(rtc.year) + " " + String(rtc.hour) + ":" + String(rtc.minute);
-    //String timestamp = String(rtc.hour) + ":" + String(rtc.minute) + ":" + String(rtc.second);
+    //String timestamp = String(rtc.hour) + ":" + String(rtc.minute);
     myNex.writeStr("tTime.txt", String(timestamp));
     myNex.writeStr("vPH.txt", String(sensorHub.getValueBySensorNumber(0))); // PH
     myNex.writeStr("vTemp.txt", String(sensorHub.getValueBySensorNumber(1))); // °C
@@ -117,7 +121,77 @@ void loop() {
 	}
 }
 
+void trigger0(){
+  if(rtc.day < 32){
+    rtc.adjustRtc(rtc.year, rtc.month, rtc.day + 1, 0, rtc.hour, rtc.minute, 0);
+  } else {
+    rtc.adjustRtc(rtc.year, rtc.month, 1, 0, rtc.hour, rtc.minute, 0);
+  }
+}
 
+void trigger1(){
+  if(rtc.month < 13){
+    rtc.adjustRtc(rtc.year, rtc.month + 1, rtc.day, 0, rtc.hour, rtc.minute, 0);
+  } else {
+    rtc.adjustRtc(rtc.year, 1, rtc.day, 0, rtc.hour, rtc.minute, 0);
+  }
+}
+
+void trigger2(){
+  rtc.adjustRtc(rtc.year + 1, rtc.month, rtc.day, 0, rtc.hour, rtc.minute, 0);
+}
+
+void trigger3(){
+  if(rtc.hour < 24){
+    rtc.adjustRtc(rtc.year, rtc.month, rtc.day, 0, rtc.hour + 1, rtc.minute, 0);
+  } else {
+    rtc.adjustRtc(rtc.year, rtc.month, rtc.day, 0, 0, rtc.minute, 0);
+  }
+}
+
+void trigger4(){
+  if(rtc.minute < 60){
+    rtc.adjustRtc(rtc.year, rtc.month, rtc.day, 0, rtc.hour, rtc.minute + 1, 0);
+  } else {
+    rtc.adjustRtc(rtc.year, rtc.month, rtc.day, 0, rtc.hour, 0, 0);
+  }
+}
+
+void trigger5(){
+  if(rtc.day > 0){
+    rtc.adjustRtc(rtc.year, rtc.month, rtc.day - 1, 0, rtc.hour, rtc.minute, 0);
+  } else {
+    rtc.adjustRtc(rtc.year, rtc.month, 31, 0, rtc.hour, rtc.minute, 0);
+  }
+}
+
+void trigger6(){
+  if(rtc.month > 0){
+    rtc.adjustRtc(rtc.year, rtc.month - 1, rtc.day, 0, rtc.hour, rtc.minute, 0);
+  } else {
+    rtc.adjustRtc(rtc.year, 12, rtc.day, 0, rtc.hour, rtc.minute, 0);
+  }
+}
+
+void trigger7(){
+  rtc.adjustRtc(rtc.year - 1, rtc.month, rtc.day, 0, rtc.hour, rtc.minute, 0);
+}
+
+void trigger8(){
+  if(rtc.hour > 0){
+    rtc.adjustRtc(rtc.year, rtc.month, rtc.day, 0, rtc.hour - 1, rtc.minute, 0);
+  } else {
+    rtc.adjustRtc(rtc.year, rtc.month, rtc.day, 0, 23, rtc.minute, 0);
+  }
+}
+
+void trigger9(){
+  if(rtc.minute > 0){
+    rtc.adjustRtc(rtc.year, rtc.month, rtc.day, 0, rtc.hour, rtc.minute - 1, 0);
+  } else {
+    rtc.adjustRtc(rtc.year, rtc.month, rtc.day, 0, rtc.hour, 60, 0);
+  }
+}
 
 //* ***************************** Print the relevant debugging information ************** ************ * /
 // Note: Arduino M0 need to replace Serial with SerialUSB when printing debugging information
